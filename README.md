@@ -31,16 +31,23 @@ It is intentionally separated from the private working repository and uses curat
 - Framer Motion
 - Recharts
 
-## Local Run
+## Easiest Way To Open It
+
+For most Windows users:
+
+1. Make sure [Node.js LTS](https://nodejs.org/) is installed once on the computer.
+2. Double-click [Open CryptoARC Demo.cmd](./Open%20CryptoARC%20Demo.cmd).
+3. Wait a few seconds while the demo starts.
+4. Your browser should open automatically.
+
+The first launch may take a little longer because it installs the demo dependencies.
+
+## Developer Run
 
 ```powershell
 npm install
-npm run dev
+npm run dev -- --host 127.0.0.1 --port 4173
 ```
-
-Open:
-
-- [http://127.0.0.1:5173](http://127.0.0.1:5173)
 
 ## Build
 
