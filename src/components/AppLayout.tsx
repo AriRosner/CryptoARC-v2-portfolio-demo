@@ -1,5 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 
 interface AppLayoutProps {
@@ -15,6 +16,7 @@ interface AppLayoutProps {
   walletPublicKey: string;
   walletBalance: number | null;
   toasts: Array<{ id: string; created_at: string; message: string; level: string }>;
+  onDismissToast: (id: string) => void;
 }
 
 export const AppLayout: React.FC<AppLayoutProps> = ({
@@ -29,7 +31,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
   onLiveWalletOpen,
   walletPublicKey,
   walletBalance,
-  toasts
+  toasts,
+  onDismissToast
 }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(() => window.localStorage.getItem("cryptoarc_sidebar_collapsed") === "true");
   const sidebarWidth = sidebarCollapsed ? 92 : 310;
@@ -42,9 +45,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
     <div className="flex min-h-screen bg-[#08090f] text-zinc-100 selection:bg-amber-500/30 selection:text-white">
       {/* Dynamic Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-8%] left-[-8%] h-[30%] w-[30%] rounded-full bg-amber-500/4 blur-[64px]" />
-        <div className="absolute bottom-[8%] right-[8%] h-[24%] w-[24%] rounded-full bg-emerald-500/4 blur-[64px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] opacity-25" />
+        <div className="absolute top-[-8%] left-[-8%] h-[28%] w-[28%] rounded-full bg-amber-500/4 blur-[52px]" />
+        <div className="absolute bottom-[8%] right-[8%] h-[22%] w-[22%] rounded-full bg-emerald-500/4 blur-[52px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20" />
       </div>
 
       <Sidebar
@@ -63,18 +66,17 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
       />
 
       <motion.main
-        layout
         className="relative flex-1 p-8"
         animate={{ marginLeft: sidebarWidth }}
-        transition={{ type: "spring", stiffness: 400, damping: 32 }}
+        transition={{ duration: 0.24, ease: [0.2, 0.8, 0.2, 1] }}
       >
         <AnimatePresence mode="wait">
           <motion.div
             key={activePage}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18, ease: [0.2, 0.8, 0.2, 1] }}
           >
             {children}
           </motion.div>
@@ -90,9 +92,18 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
               initial={{ opacity: 0, x: 50, scale: 0.9 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 20, scale: 0.95 }}
-              className="group relative overflow-hidden rounded-xl border border-white/10 bg-[#10121c]/90 p-4 shadow-2xl backdrop-blur-xl"
+              transition={{ duration: 0.18 }}
+              className="group relative overflow-hidden rounded-xl border border-white/10 bg-[#10121c]/88 p-4 shadow-xl shadow-black/35 backdrop-blur-md"
             >
               <div className="absolute inset-y-0 left-0 w-1 bg-amber-500" />
+              <button
+                type="button"
+                onClick={() => onDismissToast(toast.id)}
+                className="absolute right-2 top-2 inline-flex h-6 w-6 items-center justify-center rounded-md text-zinc-500 transition hover:bg-white/5 hover:text-white"
+                aria-label="Dismiss notification"
+              >
+                <X size={12} />
+              </button>
               <p className="text-xs font-bold text-white leading-tight">{toast.message}</p>
               <p className="mt-1 text-[10px] text-zinc-500">
                 {new Date(toast.created_at).toLocaleTimeString()}

@@ -1,5 +1,4 @@
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Activity, Search, Filter, Eye, Pin } from "lucide-react";
 import { Card } from "./Card";
 import { Badge } from "./Badge";
@@ -60,7 +59,6 @@ interface TokenRowProps {
   watched: boolean;
   onSelectToken: (id: string) => void;
   onToggleWatch: (token: TokenSignal) => void;
-  animateIn: boolean;
 }
 
 const TokenRow = React.memo(function TokenRow({
@@ -68,19 +66,13 @@ const TokenRow = React.memo(function TokenRow({
   selected,
   watched,
   onSelectToken,
-  onToggleWatch,
-  animateIn
+  onToggleWatch
 }: TokenRowProps) {
   const pnl = token.pnl_sol || 0;
   const ageLabel = formatTokenAge(token.age_seconds || 0);
 
   return (
-    <motion.div
-      key={token.id}
-      initial={animateIn ? { opacity: 0, y: 6 } : false}
-      animate={{ opacity: 1, y: 0 }}
-      exit={undefined}
-      transition={{ duration: 0.16 }}
+    <div
       onClick={() => onSelectToken(token.id)}
       style={{ gridTemplateColumns: tokenGridColumns }}
       className={cn(
@@ -151,7 +143,7 @@ const TokenRow = React.memo(function TokenRow({
           <Eye size={14} />
         </Button>
       </div>
-    </motion.div>
+    </div>
   );
 }, (prev, next) => (
   prev.selected === next.selected &&
@@ -183,7 +175,6 @@ export const TokenTable: React.FC<TokenTableProps> = React.memo(({
   loading = false
 }) => {
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
-  const seenRowIdsRef = React.useRef<Set<string>>(new Set());
   const [scrollTop, setScrollTop] = React.useState(0);
   const [viewportHeight, setViewportHeight] = React.useState(520);
   const visibleRows = React.useMemo(() => tokens, [tokens]);
@@ -316,23 +307,16 @@ export const TokenTable: React.FC<TokenTableProps> = React.memo(({
             ) : (
               <>
                 <div style={{ height: topSpacerHeight }} />
-                <AnimatePresence initial={false}>
-                  {virtualRows.map((token) => {
-                    const animateIn = !seenRowIdsRef.current.has(token.id);
-                    seenRowIdsRef.current.add(token.id);
-                    return (
-                      <TokenRow
-                        key={token.id}
-                        token={token}
-                        selected={selectedTokenId === token.id}
-                        watched={watchlist.has(token.mint)}
-                        onSelectToken={onSelectToken}
-                        onToggleWatch={onToggleWatch}
-                        animateIn={animateIn}
-                      />
-                    );
-                  })}
-                </AnimatePresence>
+                {virtualRows.map((token) => (
+                  <TokenRow
+                    key={token.id}
+                    token={token}
+                    selected={selectedTokenId === token.id}
+                    watched={watchlist.has(token.mint)}
+                    onSelectToken={onSelectToken}
+                    onToggleWatch={onToggleWatch}
+                  />
+                ))}
                 <div style={{ height: bottomSpacerHeight }} />
               </>
             )}

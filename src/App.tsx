@@ -117,6 +117,9 @@ export default function App() {
     const next = { id, created_at: new Date().toISOString(), message, level, token_id: "" };
     setToasts((current) => [next, ...current].slice(0, 4));
   }, []);
+  const dismissToast = React.useCallback((id: string) => {
+    setToasts((current) => current.filter((toast) => toast.id !== id));
+  }, []);
 
   const filteredTokens = React.useMemo(() => {
     const query = tokenSearch.trim().toLowerCase();
@@ -195,6 +198,7 @@ export default function App() {
         walletPublicKey={liveWallets[0]}
         walletBalance={14.281}
         toasts={toasts}
+        onDismissToast={dismissToast}
       >
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-[#00ffbd]/15 bg-[#081018]/80 px-4 py-3 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
           <Badge variant="info">Portfolio Demo</Badge>

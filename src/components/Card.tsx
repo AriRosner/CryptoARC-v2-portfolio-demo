@@ -13,14 +13,13 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     return (
       <motion.div
         ref={ref}
-        initial={appear ? { opacity: 0, y: 20 } : false}
+        initial={appear ? { opacity: 0, y: 12 } : false}
         animate={appear ? { opacity: 1, y: 0 } : undefined}
-        transition={appear ? { duration: 0.4, ease: [0.2, 0.8, 0.2, 1] } : undefined}
-        whileHover={hover ? { y: -4, transition: { duration: 0.2 } } : undefined}
+        transition={appear ? { duration: 0.24, ease: [0.2, 0.8, 0.2, 1] } : undefined}
         className={cn(
           "relative overflow-hidden rounded-xl border border-white/10 bg-[#11131e]",
           glass && "backdrop-blur-xl bg-opacity-70",
-          hover && "hover:border-white/20 hover:shadow-2xl hover:shadow-black/40",
+          hover && "transition-colors hover:border-white/20 hover:shadow-lg hover:shadow-black/20",
           className
         )}
         {...props}
