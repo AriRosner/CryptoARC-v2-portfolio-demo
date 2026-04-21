@@ -42,6 +42,14 @@ For most Windows users:
 
 The first launch may take a little longer because it installs the demo dependencies.
 
+## Online Demo
+
+This repo is configured for GitHub Pages deployment from `main`.
+
+Once GitHub finishes the first deploy, the temporary online demo should be available at:
+
+- [https://arirosner.github.io/CryptoARC-v2-portfolio-demo/](https://arirosner.github.io/CryptoARC-v2-portfolio-demo/)
+
 ## Developer Run
 
 ```powershell
